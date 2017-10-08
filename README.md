@@ -14,7 +14,7 @@ Edit your .csproj and set your *.json files to CopyToOutputDirectory.
 ```  
 
 ## Sample Config Class
-Create a class with a name that ends with **Config** and inherit from *ConfigurationBase\<T\>* where **T** is a native type or List of native types. 
+Create a class with a name that ends with **Config** and inherit from *ConfigBase\<T\>* where **T** is a native type or List of native types. 
 ```javascript
     public class ServiceUrlConfig :  ConfigBase<Uri, ServiceUrlConfig>
     {
@@ -145,7 +145,7 @@ More sample usage [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/b
 ## Getting Started - *.NetFramework*
 
 ## Sample Config Class
-Create a class with a name that ends with **Config** and inherit from *ConfigurationBase\<T\>* where **T** is a native type. 
+Create a class with a name that ends with **Config** and inherit from *ConfigBase\<T\>* where **T** is a native type. 
 ```javascript
     public class ServiceUrlConfig :  ConfigBase<Uri, ServiceUrlConfig>
     {
@@ -184,7 +184,6 @@ For connectionstrings, postfix a class with **ConnectionString** otherwise, ***M
 ```javascript
     protected void Application_Start(){
         Bootstrapper.Init(new[] { "SearchPattern*.dll" });      //DirectoryCatalog pattern
-        var mef = Mef.ClassFactory.MefContainer;
     }
 ```
 ```javascript
