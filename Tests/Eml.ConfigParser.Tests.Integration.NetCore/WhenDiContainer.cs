@@ -4,15 +4,15 @@ using Eml.ConfigParser.Tests.Integration.NetCore.Configurations;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
+using Eml.ConfigParser.Helpers;
 
 namespace Eml.ConfigParser.Tests.Integration.NetCore
 {
-    public class WhenAConfigIsInDiContainer : IClassFixture<MefFixture>
+    public class WhenDiContainer : IntegrationTestBase
     {
         [Fact]
         public void ServiceProvider_ShouldReturnValue()
         {
-            var configuration = IntegrationTestBase.GetConfiguration();
             var serviceProvider = new ServiceCollection()
                 .AddSingleton(configuration)
                 .AddSingleton<ServiceUrlConfig>()
@@ -28,10 +28,9 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         [Fact]
         public void Mef_ShouldReturnValue()
         {
-            var mef = Mef.ClassFactory.MefContainer;
             var result = new Uri("http://testSite.com/home");
 
-            var sut = mef.GetExport<ServiceUrlConfig>();
+            var sut = classFactory.GetExport<ServiceUrlConfig>();
 
             sut.Value.ShouldBe(result);
         }
@@ -39,10 +38,9 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         [Fact]
         public void Mef_ShouldReturnValueWhenGenerics()
         {
-            var mef = Mef.ClassFactory.MefContainer;
             var result = new Uri("http://testSite.com/home");
 
-            var sut = mef.GetExport<IConfigBase<Uri, ServiceUrlConfig>>();
+            var sut = classFactory.GetExport<IConfigBase<Uri, ServiceUrlConfig>>();
 
             sut.Value.ShouldBe(result);
         }

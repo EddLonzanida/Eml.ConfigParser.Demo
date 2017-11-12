@@ -1,21 +1,29 @@
 ﻿using System;
 using Eml.ConfigParser.Tests.Integration.NetFull.BaseClasses;
 using Eml.ConfigParser.Tests.Integration.NetFull.Configurations;
-using Eml.Mef;
 using Shouldly;
 using Xunit;
 
 namespace Eml.ConfigParser.Tests.Integration.NetFull
 {
-    public class WhenAConfigIsInDiContainer : IClassFixture<MefFixture>
+    public class WhenDiContainer : IntegrationTestBase
     {
         [Fact]
         public void Mef_ShouldReturnValue()
         {
-            var mef = Mef.ClassFactory.MefContainer;
             var result = new Uri("http://testSite.com/home");
 
-            var sut = mef.GetExportedValue<IConfigBase<Uri, ServiceUrlConfig>>();
+            var sut = classFactory.GetExport<ServiceUrlConfig>();
+
+            sut.Value.ShouldBe(result);
+        }
+
+        [Fact]
+        public void Mef_ShouldReturnValueWhenGenerics()
+        {
+            var result = new Uri("http://testSite.com/home");
+
+            var sut = classFactory.GetExport<IConfigBase<Uri, ServiceUrlConfig>>();
 
             sut.Value.ShouldBe(result);
         }

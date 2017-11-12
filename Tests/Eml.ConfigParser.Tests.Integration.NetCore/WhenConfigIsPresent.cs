@@ -13,7 +13,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         [Fact]
         public void Value_ShouldBeInteger()
         {
-            var sut = new IntellisenseCountConfig(Configuration);
+            var sut = new IntellisenseCountConfig(configuration);
             sut.Value.ShouldBe(15);
         }
 
@@ -22,7 +22,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         {
             var result = new Uri("http://testSite.com/home");
 
-            var sut = new ServiceUrlConfig(Configuration);
+            var sut = new ServiceUrlConfig(configuration);
 
             sut.Value.ShouldBe(result);
         }
@@ -30,7 +30,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         [Fact]
         public void Value_ShouldBeConnectionString()
         {
-            var sut = new DefaultConnectionString(Configuration);
+            var sut = new DefaultConnectionString(configuration);
 
             sut.Value.ShouldBe("Server=.;Database=TestDb;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
@@ -38,7 +38,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         [Fact]
         public void Value_ShouldBeTimeSpan()
         {
-            var sut = new ExpiryConfig(Configuration);
+            var sut = new ExpiryConfig(configuration);
 
             sut.Value.Minutes.ShouldBe(30);
         }
@@ -48,7 +48,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         {
             var result = DateTime.Parse("2009-05-08 14:40:52");
 
-            var sut = new DueDateConfig(Configuration);
+            var sut = new DueDateConfig(configuration);
 
             sut.Value.ShouldBe(result);
         }
@@ -58,7 +58,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         {
             var result = new List<string> { "Item1", "Item2" };
 
-            var sut = new WhiteListConfig(Configuration);
+            var sut = new WhiteListConfig(configuration);
 
             sut.Value.ShouldBe(result);
         }
@@ -68,7 +68,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         {
             var result = new List<double> { 1.1, 2.2 };
 
-            var sut = new NumericListConfig(Configuration);
+            var sut = new NumericListConfig(configuration);
 
             sut.Value.ShouldBe(result);
         }
@@ -82,7 +82,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
                 new Uri("https://localhost:44379/") }
             );
 
-            var sut = new UriListConfig(Configuration);
+            var sut = new UriListConfig(configuration);
 
             sut.Value.ShouldBe(result);
         }
@@ -90,7 +90,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         [Fact]
         public void Value_ShouldBeComplexClass()
         {
-            var sut = new MyComplexClassConfig(Configuration).Value;
+            var sut = new MyComplexClassConfig(configuration).Value;
 
             sut.StringSetting.ShouldBe("My Value");
             sut.IntSetting.ShouldBe(23);
