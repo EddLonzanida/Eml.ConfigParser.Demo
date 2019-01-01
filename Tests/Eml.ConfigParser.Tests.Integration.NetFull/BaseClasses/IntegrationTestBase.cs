@@ -1,16 +1,19 @@
 ﻿using Eml.ClassFactory.Contracts;
+using Eml.Extensions;
 using Xunit;
 
 namespace Eml.ConfigParser.Tests.Integration.NetFull.BaseClasses
 {
-    [Collection(MefFixture.CLASS_FIXTURE)]
+    [Collection(IntegrationTestDiFixture.COLLECTION_DEFINITION)]
     public abstract class IntegrationTestBase
     {
         protected readonly IClassFactory classFactory;
 
         protected IntegrationTestBase()
         {
-            classFactory = Mef.ClassFactory.MefContainer.GetExportedValue<IClassFactory>();
+            classFactory = IntegrationTestDiFixture.ClassFactory;
+
+            classFactory.CheckNotNull("classFactory");
         }
     }
 }
