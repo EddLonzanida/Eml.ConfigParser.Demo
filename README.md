@@ -111,10 +111,10 @@ More sample configs [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo
     }
 }
 ```
-### 2.1 Instantiate ServiceUrlConfig - *Manually*
+### 2.1 Instantiate ServiceUrlConfigParser - *Manually*
 * Startup.cs
 ```javascript
-var serviceUrlConfig = new ServiceUrlConfig(configuration);
+var serviceUrlConfigParser = new ServiceUrlConfigParser(configuration);
 ```
 
 ### 2.2 Or add to DI container and register - via *IServiceCollection*
@@ -162,8 +162,8 @@ public void ConfigureServices(IServiceCollection services)
 public class ConsumerClass 
 {
     [ImportingConstructor]
-    public ConsumerClass(ServiceUrlConfig serviceUrlConfig) { 
-        var serviceUrlConfigValue = serviceUrlConfig.Value; //retrieve value
+    public ConsumerClass(ServiceUrlConfigParser serviceUrlConfigParser) { 
+        var serviceUrlConfigParserValue = serviceUrlConfigParser.Value; //retrieve value
     }
 }
 ```
@@ -176,15 +176,15 @@ More sample usage [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/b
 ## Getting Started - *.NetFramework*
 
 ## Sample Config Class
-Create a class with a name that ends with **Config** and inherit from *ConfigBase\<T\>* where **T** is a native type. 
+Create a class with a name that ends with **ConfigParser** and inherit from *ConfigParserBase\<T\>* where **T** is a native type. 
 ```javascript
-public class ServiceUrlConfig :  ConfigBase<Uri, ServiceUrlConfig>
+public class ServiceUrlConfigParser :  ConfigParserBase<Uri, ServiceUrlConfig>
 {
 }
  ```
-For connectionstrings, postfix a class with **ConnectionString** otherwise, ***MissingSettingException*** will occur. 
+For connectionstrings, postfix a class with **ConnectionStringParser** otherwise, ***MissingSettingException*** will occur. 
 ```javascript
-public class DefaultConnectionString : ConfigBase<string, DefaultConnectionString>
+public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultConnectionString>
 {
 }
  ```
@@ -205,10 +205,10 @@ public class DefaultConnectionString : ConfigBase<string, DefaultConnectionStrin
     </appSettings>
 </configuration>
  ``` 
-### 2. Instantiate ServiceUriConfig - *Manually*
+### 2. Instantiate ServiceUriConfigParser - *Manually*
 ```javascript
-var serviceUrlConfig = new ServiceUrlConfigParser(configuration);
-var serviceUrlConfigValue = serviceUrlConfig.Value;         //retrieve value
+var serviceUrlConfigParser = new ServiceUrlConfigParser(configuration);
+var serviceUrlConfigParserValue = serviceUrlConfigParser.Value;         //retrieve value
 ```
 
 ### 3. Or add to DI container and load - via *[Mef Bootstrapper](https://preview.nuget.org/packages/Eml.MefBootstrapper/)*
@@ -226,8 +226,8 @@ using System.ComponentModel.Composition;
 public class ConsumerClass 
 {
     [ImportingConstructor]
-    public ConsumerClass(IConfigBase<Uri, ServiceUrlConfig> serviceUrlConfig) { 
-        var serviceUrlConfigValue = serviceUrlConfig.Value;
+    public ConsumerClass(IConfigParserBase<Uri, ServiceUrlConfigParser> serviceUrlConfigParser) { 
+        var serviceUrlConfigParserValue = serviceUrlConfigParser.Value;
     }
 }
 ```
