@@ -10,7 +10,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetFull
         [Fact]
         public void Value_ShouldBeInteger()
         {
-            var sut = new IntellisenseCountConfig();
+            var sut = new IntellisenseCountConfigParser();
 
             sut.Value.ShouldBe(15);
         }
@@ -20,7 +20,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetFull
         {
             var result = new Uri("http://testSite.com/home");
 
-            var sut = new ServiceUrlConfig();
+            var sut = new ServiceUrlConfigParser();
 
             sut.Value.ShouldBe(result);
         }
@@ -36,7 +36,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetFull
         [Fact]
         public void Value_ShouldBeTimeSpan()
         {
-            var sut = new ExpiryConfig();
+            var sut = new ExpiryConfigParser();
 
             sut.Value.Minutes.ShouldBe(30);
         }
@@ -45,7 +45,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetFull
         public void Value_ShouldBeDateTime()
         {
             var result = DateTime.Parse("2009-05-08 14:40:52");
-            var sut = new DueDateConfig();
+            var sut = new DueDateConfigParser();
 
             sut.Value.ShouldBe(result);
         }

@@ -2,27 +2,40 @@
 using Eml.ConfigParser.Helpers;
 using Eml.Mef;
 using System;
+using System.Collections.Generic;
 using System.Composition.Hosting;
 using System.Composition.Hosting.Core;
 using Xunit;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Eml.ConfigParser.Tests.Integration.NetCore.BaseClasses
 {
     public class IntegrationTestDiFixture : IDisposable
     {
         public const string COLLECTION_DEFINITION = "IntegrationTestDiFixture CollectionDefinition";
+
+        public const string APP_PREFIX = "Eml.";
+
         public static IClassFactory ClassFactory { get; private set; }
+
         public static IConfiguration Configuration { get; private set; }
 
         public IntegrationTestDiFixture()
         {
-            var configuration = ConfigBuilder.GetConfiguration();
+            var loggerFactory = new LoggerFactory();
 
-            ExportDescriptorProvider InstanceRegistration(ContainerConfiguration r) => r.WithInstance(configuration);
+            Configuration = ConfigBuilder.GetConfiguration()
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-            ClassFactory = Bootstrapper.Init(InstanceRegistration);
-            Configuration = ConfigBuilder.GetConfiguration();
+            var instanceRegistrations = new List<Func<ContainerConfiguration, ExportDescriptorProvider>>
+            {
+                r => r.WithInstance(loggerFactory),
+                r => r.WithInstance(Configuration)
+            };
+
+            ClassFactory = Bootstrapper.Init(APP_PREFIX, instanceRegistrations);
         }
 
         public void Dispose()

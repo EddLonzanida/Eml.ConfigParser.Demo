@@ -1,5 +1,4 @@
 ﻿using System;
-using Eml.ConfigParser.Tests.Integration.NetCore.CustomParser;
 using Eml.ConfigParser.Tests.Integration.NetCore.ComplexClass;
 using Microsoft.Extensions.Configuration;
 using Eml.ConfigParser.Parsers;

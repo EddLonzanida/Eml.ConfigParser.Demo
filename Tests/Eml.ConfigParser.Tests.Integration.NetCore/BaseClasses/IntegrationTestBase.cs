@@ -1,9 +1,6 @@
 ﻿using Eml.ClassFactory.Contracts;
-using Eml.ConfigParser.Helpers;
-using Eml.ConfigParser.Tests.Integration.NetCore.Configurations;
 using Eml.Extensions;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Eml.ConfigParser.Tests.Integration.NetCore.BaseClasses

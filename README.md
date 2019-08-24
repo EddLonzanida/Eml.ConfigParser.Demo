@@ -13,29 +13,66 @@ Edit your .csproj and set your *.json files to CopyToOutputDirectory.
 </ItemGroup>
 ```  
 
-## Sample Config Class
-Create a class with a name that ends with **Config** and inherit from *ConfigBase\<T\>* where **T** is a native type or List of native types. 
+## Sample Config Classes
+Create a class with a name that ends with **ConfigParser** and inherit from *ConfigBase\<T\>* where **T** is a native type or List of native types. 
 ```javascript
-public class ServiceUrlConfig : ConfigBase<Uri, ServiceUrlConfig>
+public class ServiceUrlConfigParser : ConfigParserBase<Uri, ServiceUrlConfigParser>
 {
-    public ServiceUrlConfig(IConfiguration configuration)
+    /// <summary>
+    /// DI signature: <![CDATA[IConfigBase<Uri, ServiceUrlConfigParser> serviceUrlConfigParser]]>.
+    /// </summary>
+    public ServiceUrlConfigParser(IConfiguration configuration) : base(configuration)
+    {
+    }
+}
+ ```
+For connectionstrings, postfix a class with **ConnectionStringParser** otherwise, ***MissingSettingException*** will occur. 
+```javascript
+public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultConnectionStringParser>
+{
+    /// <summary>
+    /// DI signature: <![CDATA[IConfigBase<string, DefaultConnectionStringParser> defaultConnectionStringParser]]>.
+    /// </summary>
+    public DefaultConnectionStringParser(IConfiguration configuration)
         : base(configuration)
     {
     }
 }
  ```
-For connectionstrings, postfix a class with **ConnectionString** otherwise, ***MissingSettingException*** will occur. 
+ * Sometimes you want to place your configurations in one place and elliminate the need for multiple ConfigParser classes. Sample below will allow you to do just that. Take note of the **new ***ComplexTypeConfigParser***\<MyComplexClass\>()** below:
 ```javascript
-public class DefaultConnectionString : ConfigBase<string, DefaultConnectionString>
+public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyComplexClassConfigParser>
 {
-    public DefaultConnectionString(IConfiguration configuration)
-        : base(configuration)
+    /// <summary>
+    /// DI signature: <![CDATA[IConfigBase<MyComplexClass, MyComplexClassConfigParser> myComplexClassConfigParser]]>.
+    /// </summary>
+    public MyComplexClassConfigParser(IConfiguration configuration)
+        : base(configuration, new ComplexTypeConfigParser<MyComplexClass>())
     {
     }
 }
- ```
- 
-Refer [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/blob/master/Tests/Eml.ConfigParser.Tests.Integration.NetCore/ComplexClass/MyComplexClass.cs) for complex type sample.
+
+public class MyComplexClass
+{
+    public string StringSetting { get; set; }
+    public int IntSetting { get; set; }
+    public Dictionary<string, InnerClass> Dictionary { get; set; }
+    public List<string> ListOfValues { get; set; }
+    public MyEnum AnEnum { get; set; }
+}
+```
+* Sample   config parser for **List<>**.
+```javascript
+public class WhiteListConfigParser : ConfigParserBase<List<string>, WhiteListConfigParser>
+{
+    /// <summary>
+    /// DI signature: <![CDATA[IConfigBase<List<string>, WhiteListConfigParser> whiteListConfigParser]]>.
+    /// </summary>
+    public WhiteListConfigParser(IConfiguration configuration) : base(configuration)
+    {
+    }
+}
+```
 
 More sample configs [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/tree/master/Tests/Eml.ConfigParser.Tests.Integration.NetCore/Configurations).
    
@@ -86,7 +123,7 @@ var serviceUrlConfig = new ServiceUrlConfig(configuration);
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddSingleton<IConfiguration>(configuration); 
-    services.AddSingleton<ServiceUrlConfig>();
+    services.AddSingleton<ServiceUrlConfigParser>();
 }
 ```
 
@@ -130,9 +167,8 @@ public class ConsumerClass
     }
 }
 ```
+
 More DI sample [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/blob/master/Tests/Eml.ConfigParser.Tests.Integration.NetCore/WhenAConfigIsInDiContainer.cs).
-
-
 More sample usage [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/blob/master/Tests/Eml.ConfigParser.Tests.Integration.NetCore/WhenConfigIsPresent.cs).
 
 ##  
@@ -171,7 +207,7 @@ public class DefaultConnectionString : ConfigBase<string, DefaultConnectionStrin
  ``` 
 ### 2. Instantiate ServiceUriConfig - *Manually*
 ```javascript
-var serviceUrlConfig = new ServiceUrlConfig(configuration);
+var serviceUrlConfig = new ServiceUrlConfigParser(configuration);
 var serviceUrlConfigValue = serviceUrlConfig.Value;         //retrieve value
 ```
 

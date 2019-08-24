@@ -13,7 +13,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         {
             Should.Throw<MissingSettingException>(() =>
             {
-                var default2ConnectionString = new Default2ConnectionString(configuration);
+                var default2ConnectionString = new Default2ConnectionStringParser(configuration);
             });
         }
 
@@ -22,7 +22,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         {
             Should.Throw<MissingSettingException>(() =>
             {
-                var intellisenseDefaultCountConfig = new IntellisenseDefaultCountConfig(configuration);
+                var intellisenseDefaultCountConfig = new IntellisenseDefaultCountConfigParser(configuration);
             });
         }
     }

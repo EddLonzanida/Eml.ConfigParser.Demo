@@ -13,7 +13,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetFull
         {
             var result = new Uri("http://testSite.com/home");
 
-            var sut = classFactory.GetExport<ServiceUrlConfig>();
+            var sut = classFactory.GetExport<ServiceUrlConfigParser>();
 
             sut.Value.ShouldBe(result);
         }
@@ -23,7 +23,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetFull
         {
             var result = new Uri("http://testSite.com/home");
 
-            var sut = classFactory.GetExport<IConfigBase<Uri, ServiceUrlConfig>>();
+            var sut = classFactory.GetExport<IConfigParserBase<Uri, ServiceUrlConfigParser>>();
 
             sut.Value.ShouldBe(result);
         }

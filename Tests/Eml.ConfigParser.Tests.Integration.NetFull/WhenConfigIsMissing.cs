@@ -21,7 +21,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetFull
         {
             Should.Throw<MissingSettingException>(() =>
             {
-                var intellisenseDefaultCountConfig = new IntellisenseDefaultCountConfig();
+                var intellisenseDefaultCountConfig = new IntellisenseDefaultCountConfigParser();
             });
         }
     }

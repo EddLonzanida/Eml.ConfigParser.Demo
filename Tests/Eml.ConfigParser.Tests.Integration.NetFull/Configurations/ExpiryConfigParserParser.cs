@@ -2,7 +2,7 @@
 
 namespace Eml.ConfigParser.Tests.Integration.NetFull.Configurations
 {
-    public class ExpiryConfig : ConfigBase<TimeSpan, ExpiryConfig>
+    public class ExpiryConfigParser : ConfigParserBase<TimeSpan, ExpiryConfigParser>
     {
     }
 }

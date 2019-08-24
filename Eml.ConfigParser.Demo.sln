@@ -7,7 +7,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B2BA73DC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eml.ConfigParser.Tests.Integration.NetCore", "Tests\Eml.ConfigParser.Tests.Integration.NetCore\Eml.ConfigParser.Tests.Integration.NetCore.csproj", "{2FC6A8F9-071E-470A-9C1E-931DEB40F4D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eml.ConfigParser.Tests.Integration.NetFull", "Tests\Eml.ConfigParser.Tests.Integration.NetFull\Eml.ConfigParser.Tests.Integration.NetFull.csproj", "{60B2E91E-8F92-4B54-84B5-0A263BE77EA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eml.ConfigParser.Tests.Integration.NetFull", "Tests\Eml.ConfigParser.Tests.Integration.NetFull\Eml.ConfigParser.Tests.Integration.NetFull.csproj", "{60B2E91E-8F92-4B54-84B5-0A263BE77EA2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BE68672C-7002-4FB7-979C-243260B135BE}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
