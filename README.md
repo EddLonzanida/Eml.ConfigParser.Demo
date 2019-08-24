@@ -19,7 +19,7 @@ Create a class with a name that ends with **ConfigParser** and inherit from *Con
 public class ServiceUrlConfigParser : ConfigParserBase<Uri, ServiceUrlConfigParser>
 {
     /// <summary>
-    /// DI signature: <![CDATA[IConfigBase<Uri, ServiceUrlConfigParser> serviceUrlConfigParser]]>.
+    /// DI signature: <![CDATA[IConfigParserBase<Uri, ServiceUrlConfigParser> serviceUrlConfigParser]]>.
     /// </summary>
     public ServiceUrlConfigParser(IConfiguration configuration) : base(configuration)
     {
@@ -31,7 +31,7 @@ For connectionstrings, postfix a class with **ConnectionStringParser** otherwise
 public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultConnectionStringParser>
 {
     /// <summary>
-    /// DI signature: <![CDATA[IConfigBase<string, DefaultConnectionStringParser> defaultConnectionStringParser]]>.
+    /// DI signature: <![CDATA[IConfigParserBase<string, DefaultConnectionStringParser> defaultConnectionStringParser]]>.
     /// </summary>
     public DefaultConnectionStringParser(IConfiguration configuration)
         : base(configuration)
@@ -39,12 +39,12 @@ public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultCon
     }
 }
  ```
- * Sometimes you want to place your configurations in one place and elliminate the need for multiple ConfigParser classes. Sample below will allow you to do just that. Take note of the **new ***ComplexTypeConfigParser***\<MyComplexClass\>()** below:
+ * Sometimes you want to place your configurations in one place and elliminate the need for multiple ConfigParser classes. Sample below will allow you to do just that. Take note of the ***new ComplexTypeConfigParser***\<MyComplexClass\>() below:
 ```javascript
 public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyComplexClassConfigParser>
 {
     /// <summary>
-    /// DI signature: <![CDATA[IConfigBase<MyComplexClass, MyComplexClassConfigParser> myComplexClassConfigParser]]>.
+    /// DI signature: <![CDATA[IConfigParserBase<MyComplexClass, MyComplexClassConfigParser> myComplexClassConfigParser]]>.
     /// </summary>
     public MyComplexClassConfigParser(IConfiguration configuration)
         : base(configuration, new ComplexTypeConfigParser<MyComplexClass>())
@@ -66,7 +66,7 @@ public class MyComplexClass
 public class WhiteListConfigParser : ConfigParserBase<List<string>, WhiteListConfigParser>
 {
     /// <summary>
-    /// DI signature: <![CDATA[IConfigBase<List<string>, WhiteListConfigParser> whiteListConfigParser]]>.
+    /// DI signature: <![CDATA[IConfigParserBase<List<string>, WhiteListConfigParser> whiteListConfigParser]]>.
     /// </summary>
     public WhiteListConfigParser(IConfiguration configuration) : base(configuration)
     {
@@ -114,20 +114,31 @@ More sample configs [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo
 ### 2.1 Instantiate ServiceUrlConfigParser - *Manually*
 * Startup.cs
 ```javascript
-var serviceUrlConfigParser = new ServiceUrlConfigParser(configuration);
+public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
+{
+    var serviceUrlConfigParser = new ServiceUrlConfigParser(configuration);
+    var serviceUrlConfigParserValue = serviceUrlConfigParser.Value;     // retrieve value
+}
 ```
 
 ### 2.2 Or add to DI container and register - via *IServiceCollection*
 * Startup.cs
 ```javascript
+public IConfiguration Configuration { get; private set; }
+
+public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
+{
+    Configuration = configuration;
+}
+
 public void ConfigureServices(IServiceCollection services)
 {
-    services.AddSingleton<IConfiguration>(configuration); 
-    services.AddSingleton<ServiceUrlConfigParser>();
+    services.AddSingleton<IConfiguration>(Configuration);           // register to build-in DI contianer
+    services.AddSingleton<ServiceUrlConfigParser>();                // register to build-in DI contianer
 }
 ```
 
-### 2.3 Or add to DI container and register - via *[Mef Bootstrapper](https://preview.nuget.org/packages/Eml.MefBootstrapper/)*
+### 2.3 Or add to MEF DI container and register - via *[Mef Bootstrapper](https://preview.nuget.org/packages/Eml.MefBootstrapper/)*
 * Startup.cs
 ```javascript
 public IConfiguration Configuration { get; private set; }
@@ -162,15 +173,11 @@ public void ConfigureServices(IServiceCollection services)
 public class ConsumerClass 
 {
     [ImportingConstructor]
-    public ConsumerClass(ServiceUrlConfigParser serviceUrlConfigParser) { 
+    public ConsumerClass(IConfigParserBase<Uri, ServiceUrlConfigParser> serviceUrlConfigParser) { 
         var serviceUrlConfigParserValue = serviceUrlConfigParser.Value; //retrieve value
     }
 }
 ```
-
-More DI sample [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/blob/master/Tests/Eml.ConfigParser.Tests.Integration.NetCore/WhenAConfigIsInDiContainer.cs).
-More sample usage [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/blob/master/Tests/Eml.ConfigParser.Tests.Integration.NetCore/WhenConfigIsPresent.cs).
-
 ##  
 
 ## Getting Started - *.NetFramework*
@@ -207,11 +214,11 @@ public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultCon
  ``` 
 ### 2. Instantiate ServiceUriConfigParser - *Manually*
 ```javascript
-var serviceUrlConfigParser = new ServiceUrlConfigParser(configuration);
+var serviceUrlConfigParser = new ServiceUrlConfigParser();
 var serviceUrlConfigParserValue = serviceUrlConfigParser.Value;         //retrieve value
 ```
 
-### 3. Or add to DI container and load - via *[Mef Bootstrapper](https://preview.nuget.org/packages/Eml.MefBootstrapper/)*
+### 3. Or add to MEF DI container and load - via *[Mef Bootstrapper](https://preview.nuget.org/packages/Eml.MefBootstrapper/)*
 * Global.asax.cs
 ```javascript
 protected void Application_Start(){
