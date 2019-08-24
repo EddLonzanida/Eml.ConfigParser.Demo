@@ -14,7 +14,7 @@ Edit your .csproj and set your *.json files to CopyToOutputDirectory.
 ```  
 
 ## Sample Config Classes
-Create a class with a name that ends with **ConfigParser** and inherit from *ConfigBase\<T\>* where **T** is a native type or List of native types. 
+Create a class with a name that ends with **ConfigParser** and inherit from *ConfigParserBase\<T\>* where **T** is a native type or List of native types. 
 ```javascript
 public class ServiceUrlConfigParser : ConfigParserBase<Uri, ServiceUrlConfigParser>
 {
