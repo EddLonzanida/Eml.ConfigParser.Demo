@@ -25,12 +25,14 @@ public class ServiceUrlConfigParser : ConfigParserBase<Uri, ServiceUrlConfigPars
     {
     }
 }
- ```
+```
+
 #### appsettings.json
 ```javascript  
 {
     "ServiceLocationUrl": "http://testSite.com/home"
 }
+```
 
 For connectionstrings, postfix a class with **ConnectionStringParser** otherwise, ***MissingSettingException*** will occur. 
 ```javascript
@@ -44,7 +46,7 @@ public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultCon
     {
     }
 }
- ```
+```
  
  #### appsettings.json
 ```javascript  
@@ -53,7 +55,8 @@ public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultCon
         "DefaultConnectionString": "Server=.;Database=TestDb;Trusted_Connection=True;MultipleActiveResultSets=true"
     }
 }
-
+```
+ 
  * Sometimes you want to place your configurations in one place and elliminate the need for multiple ConfigParser classes. Sample below will allow you to do just that. Take note of the ***new ComplexTypeConfigParser***\<MyComplexClass\>() below:
 ```javascript
 public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyComplexClassConfigParser>
@@ -115,12 +118,13 @@ public class WhiteListConfigParser : ConfigParserBase<List<string>, WhiteListCon
 }
 ```
 
-### appsettings.json
+#### appsettings.json
 ```javascript  
 {
     "WhiteList": [ "http://example.com", "https://localhost:44355/", "https://localhost:44379/" ]
 }
 ```
+
 More sample configs [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/tree/master/Tests/Eml.ConfigParser.Tests.Integration.NetCore/Configurations).
    
 ## Usage
