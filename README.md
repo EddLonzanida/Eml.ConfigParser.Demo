@@ -15,6 +15,14 @@ Edit your .csproj and set your *.json files to CopyToOutputDirectory.
 
 ## Sample Config Classes
 Create a class with a name that ends with **ConfigParser** and inherit from *ConfigParserBase\<T\>* where **T** is a native type or List of native types. 
+
+#### appsettings.json
+```javascript  
+{
+    "ServiceLocationUrl": "http://testSite.com/home"
+}
+```
+
 ```javascript
 public class ServiceUrlConfigParser : ConfigParserBase<Uri, ServiceUrlConfigParser>
 {
@@ -26,11 +34,13 @@ public class ServiceUrlConfigParser : ConfigParserBase<Uri, ServiceUrlConfigPars
     }
 }
 ```
-
-#### appsettings.json
+ 
+ #### appsettings.json
 ```javascript  
 {
-    "ServiceLocationUrl": "http://testSite.com/home"
+    "ConnectionStrings": {
+        "DefaultConnectionString": "Server=.;Database=TestDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
 }
 ```
 
@@ -47,38 +57,8 @@ public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultCon
     }
 }
 ```
- 
- #### appsettings.json
-```javascript  
-{
-    "ConnectionStrings": {
-        "DefaultConnectionString": "Server=.;Database=TestDb;Trusted_Connection=True;MultipleActiveResultSets=true"
-    }
-}
-```
- 
- * Sometimes you want to place your configurations in one place and elliminate the need for multiple ConfigParser classes. Sample below will allow you to do just that. Take note of the ***new ComplexTypeConfigParser***\<MyComplexClass\>() below:
-```javascript
-public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyComplexClassConfigParser>
-{
-    /// <summary>
-    /// DI signature: <![CDATA[IConfigParserBase<MyComplexClass, MyComplexClassConfigParser> myComplexClassConfigParser]]>.
-    /// </summary>
-    public MyComplexClassConfigParser(IConfiguration configuration)
-        : base(configuration, new ComplexTypeConfigParser<MyComplexClass>())
-    {
-    }
-}
 
-public class MyComplexClass
-{
-    public string StringSetting { get; set; }
-    public int IntSetting { get; set; }
-    public MyEnum AnEnum { get; set; }
-    public List<string> ListOfValues { get; set; }
-    public Dictionary<string, InnerClass> Dictionary { get; set; }
-}
-```
+ * Sometimes you want to place your configurations in one place and elliminate the need for multiple ConfigParser classes. Sample below will allow you to do just that. Take note of the ***new ComplexTypeConfigParser***\<MyComplexClass\>() below:
 
 #### appsettings.json
 ```javascript  
@@ -105,7 +85,37 @@ public class MyComplexClass
 }
 ```
 
+```javascript
+public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyComplexClassConfigParser>
+{
+    /// <summary>
+    /// DI signature: <![CDATA[IConfigParserBase<MyComplexClass, MyComplexClassConfigParser> myComplexClassConfigParser]]>.
+    /// </summary>
+    public MyComplexClassConfigParser(IConfiguration configuration)
+        : base(configuration, new ComplexTypeConfigParser<MyComplexClass>())
+    {
+    }
+}
+
+public class MyComplexClass
+{
+    public string StringSetting { get; set; }
+    public int IntSetting { get; set; }
+    public MyEnum AnEnum { get; set; }
+    public List<string> ListOfValues { get; set; }
+    public Dictionary<string, InnerClass> Dictionary { get; set; }
+}
+```
+
 * Sample   config parser for **List<>**.
+
+#### appsettings.json
+```javascript  
+{
+    "WhiteList": [ "http://example.com", "https://localhost:44355/", "https://localhost:44379/" ]
+}
+```
+
 ```javascript
 public class WhiteListConfigParser : ConfigParserBase<List<string>, WhiteListConfigParser>
 {
@@ -115,13 +125,6 @@ public class WhiteListConfigParser : ConfigParserBase<List<string>, WhiteListCon
     public WhiteListConfigParser(IConfiguration configuration) : base(configuration)
     {
     }
-}
-```
-
-#### appsettings.json
-```javascript  
-{
-    "WhiteList": [ "http://example.com", "https://localhost:44355/", "https://localhost:44379/" ]
 }
 ```
 
