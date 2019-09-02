@@ -16,7 +16,7 @@ Edit your .csproj and set your *.json files to CopyToOutputDirectory.
 ## Sample Config Classes
 Create a class with a name that ends with **ConfigParser** and inherit from *ConfigParserBase\<T\>* where **T** is a native type or List of native types. 
 
-#### appsettings.json
+* Uri
 ```javascript  
 {
     "ServiceLocationUrl": "http://testSite.com/home"
@@ -29,13 +29,14 @@ public class ServiceUrlConfigParser : ConfigParserBase<Uri, ServiceUrlConfigPars
     /// <summary>
     /// DI signature: <![CDATA[IConfigParserBase<Uri, ServiceUrlConfigParser> serviceUrlConfigParser]]>.
     /// </summary>
-    public ServiceUrlConfigParser(IConfiguration configuration) : base(configuration)
+    public ServiceUrlConfigParser(IConfiguration configuration) 
+        : base(configuration)
     {
     }
 }
 ```
  
- #### appsettings.json
+* ConnectionString
 ```javascript  
 {
     "ConnectionStrings": {
@@ -58,9 +59,9 @@ public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultCon
 }
 ```
 
- * Sometimes you want to place your configurations in one place and elliminate the need for multiple ConfigParser classes. Sample below will allow you to do just that. Take note of the ***new ComplexTypeConfigParser***\<MyComplexClass\>() below:
+* Sometimes you want to place your configurations in one place and elliminate the need for multiple ConfigParser classes. Sample below will allow you to do just that. Take note of the ***new ComplexTypeConfigParser***\<MyComplexClass\>() below:
 
-#### appsettings.json
+* ComplexClass
 ```javascript  
 {
     "MyComplexClass": {
@@ -107,9 +108,8 @@ public class MyComplexClass
 }
 ```
 
-* Sample   config parser for **List<>**.
+* List\<string\> - below can also declared as List\<Uri\>
 
-#### appsettings.json
 ```javascript  
 {
     "WhiteList": [ "http://example.com", "https://localhost:44355/", "https://localhost:44379/" ]
@@ -122,7 +122,8 @@ public class WhiteListConfigParser : ConfigParserBase<List<string>, WhiteListCon
     /// <summary>
     /// DI signature: <![CDATA[IConfigParserBase<List<string>, WhiteListConfigParser> whiteListConfigParser]]>.
     /// </summary>
-    public WhiteListConfigParser(IConfiguration configuration) : base(configuration)
+    public WhiteListConfigParser(IConfiguration configuration) 
+        : base(configuration)
     {
     }
 }
