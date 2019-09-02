@@ -26,6 +26,12 @@ public class ServiceUrlConfigParser : ConfigParserBase<Uri, ServiceUrlConfigPars
     }
 }
  ```
+#### appsettings.json
+```javascript  
+{
+    "ServiceLocationUrl": "http://testSite.com/home"
+}
+
 For connectionstrings, postfix a class with **ConnectionStringParser** otherwise, ***MissingSettingException*** will occur. 
 ```javascript
 public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultConnectionStringParser>
@@ -39,6 +45,15 @@ public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultCon
     }
 }
  ```
+ 
+ #### appsettings.json
+```javascript  
+{
+    "ConnectionStrings": {
+        "DefaultConnectionString": "Server=.;Database=TestDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
+}
+
  * Sometimes you want to place your configurations in one place and elliminate the need for multiple ConfigParser classes. Sample below will allow you to do just that. Take note of the ***new ComplexTypeConfigParser***\<MyComplexClass\>() below:
 ```javascript
 public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyComplexClassConfigParser>
@@ -56,11 +71,37 @@ public class MyComplexClass
 {
     public string StringSetting { get; set; }
     public int IntSetting { get; set; }
-    public Dictionary<string, InnerClass> Dictionary { get; set; }
-    public List<string> ListOfValues { get; set; }
     public MyEnum AnEnum { get; set; }
+    public List<string> ListOfValues { get; set; }
+    public Dictionary<string, InnerClass> Dictionary { get; set; }
 }
 ```
+
+#### appsettings.json
+```javascript  
+{
+    "MyComplexClass": {
+        "StringSetting": "My Value",
+        "IntSetting": 23,
+        "AnEnum": "Lots",
+        "ListOfValues": [ "Value1", "Value2" ],
+        "Dictionary": {
+            "FirstKey": {
+                "Name": "First Class",
+                "IsEnabled": false
+            },
+            "SecondKey": {
+                "Name": "Second Class" //IsEnabled has a default value of True if omitted
+            },
+            "ThirdKey": {
+                "Name": "Third Class",
+                "IsEnabled": true
+            }
+        }
+    }
+}
+```
+
 * Sample   config parser for **List<>**.
 ```javascript
 public class WhiteListConfigParser : ConfigParserBase<List<string>, WhiteListConfigParser>
@@ -74,6 +115,12 @@ public class WhiteListConfigParser : ConfigParserBase<List<string>, WhiteListCon
 }
 ```
 
+### appsettings.json
+```javascript  
+{
+    "WhiteList": [ "http://example.com", "https://localhost:44355/", "https://localhost:44379/" ]
+}
+```
 More sample configs [here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/tree/master/Tests/Eml.ConfigParser.Tests.Integration.NetCore/Configurations).
    
 ## Usage
