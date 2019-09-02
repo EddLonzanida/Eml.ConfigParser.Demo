@@ -87,18 +87,18 @@ public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultCon
 ```
 
 ```javascript
-public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyComplexClassConfigParser>
+public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClassConfig, MyComplexClassConfigParser>
 {
     /// <summary>
-    /// DI signature: <![CDATA[IConfigParserBase<MyComplexClass, MyComplexClassConfigParser> myComplexClassConfigParser]]>.
+    /// DI signature: <![CDATA[IConfigParserBase<MyComplexClassConfig, MyComplexClassConfigParser> myComplexClassConfigParser]]>.
     /// </summary>
     public MyComplexClassConfigParser(IConfiguration configuration)
-        : base(configuration, new ComplexTypeConfigParser<MyComplexClass>())
+        : base(configuration, new ComplexTypeConfigParser<MyComplexClassConfig>())
     {
     }
 }
 
-public class MyComplexClass
+public class MyComplexClassConfig
 {
     public string StringSetting { get; set; }
     public int IntSetting { get; set; }
