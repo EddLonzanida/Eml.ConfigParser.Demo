@@ -295,4 +295,4 @@ public class ConsumerClass
 ```
 ## That's it.
 
-* Check out [EmlExtensions.vsix](https://marketplace.visualstudio.com/items?itemName=eDuDeTification.EmlExtensions) to automate the creation of ConfigParser, Controllers, Seeders, and more!.
+* Check out [Eml.ConfigParser.vsix](https://marketplace.visualstudio.com/items?itemName=eDuDeTification.ConfigParser) to automate the creation of ConfigParser, Controllers, Seeders, and more!.
