@@ -3,7 +3,7 @@ Use strongly-typed values from:
 * appsettings.json or any other config.json files - *.NetCore2.2* - supports List of Native Types and accepts CustomParsers for complex types.
 * App.Config or Web.Config - *.NetFramework*
 
-![](https://raw.githubusercontent.com/EddLonzanida/Eml.ConfigParser.Demo/master/Art/Steps.gif)
+![](https://raw.githubusercontent.com/EddLonzanida/Eml.ConfigParser.Demo/master/Art/Steps_v2.gif)
 
 ## Getting Started - *.NetCore2.2*
 Edit your .csproj and set your *.json files to CopyToOutputDirectory. 
