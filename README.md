@@ -3,6 +3,7 @@ Use strongly-typed values from:
 * appsettings.json or any other config.json files - *.NetCore2.2* - supports List of Native Types and accepts CustomParsers for complex types.
 * App.Config or Web.Config - *.NetFramework*
 
+### Check out [Eml.ConfigParser.vsix](https://marketplace.visualstudio.com/items?itemName=eDuDeTification.ConfigParser) to automate the creation of ConfigParser.
 ![](https://raw.githubusercontent.com/EddLonzanida/Eml.ConfigParser.Demo/master/Art/Steps_v2.gif)
 
 ## Getting Started - *.NetCore2.2*
@@ -297,4 +298,3 @@ public class ConsumerClass
 ```
 ## That's it.
 
-* Check out [Eml.ConfigParser.vsix](https://marketplace.visualstudio.com/items?itemName=eDuDeTification.ConfigParser) to automate the creation of ConfigParser, Controllers, Seeders, and more!.
