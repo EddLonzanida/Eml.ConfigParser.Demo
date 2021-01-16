@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace Eml.ConfigParser.Tests.Integration.NetCore.Configurations
 {

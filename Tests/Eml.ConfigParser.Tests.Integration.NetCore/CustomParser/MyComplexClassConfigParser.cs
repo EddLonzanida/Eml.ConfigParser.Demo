@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Eml.ConfigParser.Parsers;
 using Eml.ConfigParser.Tests.Integration.NetCore.ComplexClass;
 using Microsoft.Extensions.Configuration;
-using Eml.ConfigParser.Parsers;
+using System;
 
 namespace Eml.ConfigParser.Tests.Integration.NetCore.CustomParser
 {
@@ -12,7 +12,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore.CustomParser
         public bool CanParse(Type settingValueType, IConfigurationSection configurationSection)
         {
             _configurationSection = configurationSection;
-           return typeof(MyComplexClass).IsAssignableFrom(settingValueType);
+            return typeof(MyComplexClass).IsAssignableFrom(settingValueType);
         }
 
         public T GetValue<T>()
@@ -20,7 +20,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore.CustomParser
             var newComplexClass = new MyComplexClass();
             _configurationSection.Bind(newComplexClass);
 
-            return (T)(object) newComplexClass;
+            return (T)(object)newComplexClass;
         }
 
         public void Dispose()

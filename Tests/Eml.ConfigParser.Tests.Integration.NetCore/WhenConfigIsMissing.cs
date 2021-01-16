@@ -1,6 +1,6 @@
+using Eml.ConfigParser.Exceptions;
 using Eml.ConfigParser.Tests.Integration.NetCore.BaseClasses;
 using Eml.ConfigParser.Tests.Integration.NetCore.Configurations;
-using Eml.ConfigParser.Exceptions;
 using Shouldly;
 using Xunit;
 

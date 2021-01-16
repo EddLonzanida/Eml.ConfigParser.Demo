@@ -1,13 +1,8 @@
-﻿using Eml.ClassFactory.Contracts;
-using Eml.ConfigParser.Helpers;
-using Eml.Mef;
-using System;
-using System.Collections.Generic;
-using System.Composition.Hosting;
-using System.Composition.Hosting.Core;
-using Xunit;
+﻿using Eml.ConfigParser.Helpers;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using Xunit;
 
 namespace Eml.ConfigParser.Tests.Integration.NetCore.BaseClasses
 {
@@ -15,32 +10,41 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore.BaseClasses
     {
         public const string COLLECTION_DEFINITION = "IntegrationTestDiFixture CollectionDefinition";
 
-        public const string APP_PREFIX = "Eml.";
+        public static IServiceProvider ServiceProvider { get; private set; }
 
-        public static IClassFactory ClassFactory { get; private set; }
-
+        /// <summary>
+        /// This is required by <see cref="IConfigParserBase"/> concrete class constructor.
+        /// </summary>
         public static IConfiguration Configuration { get; private set; }
 
         public IntegrationTestDiFixture()
         {
-            var loggerFactory = new LoggerFactory();
-
             Configuration = ConfigBuilder.GetConfiguration()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            var instanceRegistrations = new List<Func<ContainerConfiguration, ExportDescriptorProvider>>
-            {
-                r => r.WithInstance(loggerFactory),
-                r => r.WithInstance(Configuration)
-            };
+            var services = new ServiceCollection();
 
-            ClassFactory = Bootstrapper.Init(APP_PREFIX, instanceRegistrations);
+            ConfigureServices(services);
+
+            ServiceProvider = services.BuildServiceProvider();
+        }
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton(Configuration); // Register IConfiguration instance
+            services.Scan(scan => scan
+                .FromAssemblyOf<IntegrationTestBase>()
+
+                    // Register ConfigParsers
+                    .AddClasses(classes => classes.AssignableTo<IConfigParserBase>())
+                    .AsSelfWithInterfaces()
+                    .WithScopedLifetime()
+            );
         }
 
         public void Dispose()
         {
-            Mef.ClassFactory.Dispose(ClassFactory);
         }
     }
 

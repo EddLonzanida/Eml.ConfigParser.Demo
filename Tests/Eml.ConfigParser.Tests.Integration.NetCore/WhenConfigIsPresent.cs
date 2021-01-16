@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
 using Eml.ConfigParser.Tests.Integration.NetCore.BaseClasses;
 using Eml.ConfigParser.Tests.Integration.NetCore.ComplexClass;
 using Eml.ConfigParser.Tests.Integration.NetCore.Configurations;
 using Shouldly;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Eml.ConfigParser.Tests.Integration.NetCore

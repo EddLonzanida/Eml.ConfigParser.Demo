@@ -1,10 +1,11 @@
-﻿using System;
-using Eml.ConfigParser.Tests.Integration.NetCore.BaseClasses;
+﻿using Eml.ConfigParser.Tests.Integration.NetCore.BaseClasses;
+using Eml.ConfigParser.Tests.Integration.NetCore.ComplexClass;
 using Eml.ConfigParser.Tests.Integration.NetCore.Configurations;
+using Eml.ConfigParser.Tests.Integration.NetCore.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
 using Xunit;
-using Eml.ConfigParser.Tests.Integration.NetCore.ComplexClass;
 
 namespace Eml.ConfigParser.Tests.Integration.NetCore
 {
@@ -29,8 +30,9 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         {
             var result = new Uri("http://testSite.com/home");
 
-            var sut = classFactory.GetExport<ServiceUrlConfigParser>();
+            var sut = ServiceProvider.GetScopedService<ServiceUrlConfigParser>();
 
+            sut.ShouldNotBeNull();
             sut.Value.ShouldBe(result);
         }
 
@@ -39,7 +41,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         {
             var result = new Uri("http://testSite.com/home");
 
-            var sut = classFactory.GetExport<IConfigParserBase<Uri, ServiceUrlConfigParser>>();
+            var sut = ServiceProvider.GetScopedService<IConfigParserBase<Uri, ServiceUrlConfigParser>>();
 
             sut.Value.ShouldBe(result);
         }
@@ -47,7 +49,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         [Fact]
         public void ComplexClass_ShouldBeDiscoverable()
         {
-            var sut = classFactory.GetExport<IConfigParserBase<MyComplexClass, MyComplexClassConfigParser>>();
+            var sut = ServiceProvider.GetRequiredService<IConfigParserBase<MyComplexClass, MyComplexClassConfigParser>>();
 
             sut.Value.StringSetting.ShouldBe("My Value");
         }
