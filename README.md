@@ -1,4 +1,4 @@
-# [Eml.ConfigParser](https://preview.nuget.org/packages/Eml.ConfigParser/)
+# [Eml.ConfigParser](https://www.nuget.org/packages/Eml.ConfigParser/)
 Use strongly-typed values from: 
 * appsettings.json or any other config.json files. Supports List of Native Types and accepts CustomParsers for complex types.
 * .Net5 is now supported.
@@ -93,6 +93,7 @@ public class AppTitleParser : ConfigParserBase<string, AppTitleParser>
     }
 }
 ```
+
 ##
 More sample configs **[here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/tree/master/Tests/Eml.ConfigParser.Tests.Integration.NetCore/Configurations)**.
 ##
