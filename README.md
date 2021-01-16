@@ -16,6 +16,8 @@ Edit your .csproj and set your *.json files to CopyToOutputDirectory.
 
 ## Sample Config Classes
 Create a class with a name that ends with **ConfigParser** and inherit from *ConfigParserBase\<T\>* where **T** is a native type or List of native types. 
+
+#### 1. Uri
 ```javascript
 public class ServiceUrlConfigParser : ConfigParserBase<Uri, ServiceUrlConfigParser>
 {
@@ -27,6 +29,7 @@ public class ServiceUrlConfigParser : ConfigParserBase<Uri, ServiceUrlConfigPars
     }
 }
  ```
+#### 2. Connectionstrings
 For connectionstrings, postfix a class with **ConnectionStringParser** otherwise, ***MissingSettingException*** will occur. 
 ```javascript
 public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultConnectionStringParser>
@@ -40,6 +43,7 @@ public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultCon
     }
 }
  ```
+#### 3. Complex object
  * Sometimes you want to place your configurations in one place and elliminate the need for multiple ConfigParser classes. Sample below will allow you to do just that. Take note of the ***new ComplexTypeConfigParser***\<MyComplexClass\>() below:
 ```javascript
 public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyComplexClassConfigParser>
@@ -62,7 +66,8 @@ public class MyComplexClass
     public MyEnum AnEnum { get; set; }
 }
 ```
-* Sample   config parser for **List<>**.
+#### 4. Lists
+* Sample config parser for **List<>**.
 ```javascript
 public class WhiteListConfigParser : ConfigParserBase<List<string>, WhiteListConfigParser>
 {
@@ -75,7 +80,22 @@ public class WhiteListConfigParser : ConfigParserBase<List<string>, WhiteListCon
 }
 ```
 
+#### 5. string
+* Sample config parser for **string**.
+```javascript
+public class AppTitleParser : ConfigParserBase<string, AppTitleParser>
+{
+    /// <summary>
+    /// DI signature: <![CDATA[IConfigParserBase<string, AppTitleParser> appTitleParser]]>.
+    /// </summary>
+    public AppTitleParser(IConfiguration configuration) : base(configuration)
+    {
+    }
+}
+```
+##
 More sample configs **[here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/tree/master/Tests/Eml.ConfigParser.Tests.Integration.NetCore/Configurations)**.
+##
    
 ## Usage
 ### 1. json entry 
