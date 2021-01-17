@@ -2,7 +2,7 @@
 Use strongly-typed values from: 
 * [appsettings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/appsettings.json) or any other config.json files. Supports List of Native Types and accepts CustomParsers for complex types.
 * .Net5 is now supported.
-* Breaking changes: *Support to lower versions of .Net framework has been removed.* You need to upgrade to .Net5 or higher.
+* **Breaking changes:** Starting with [Eml.ConfigParser.5.0.0](https://www.nuget.org/packages/Eml.ConfigParser/5.0.0), support to lower versions of .Net framework *has been removed.* You need to upgrade to .Net5 or higher.
 
 ## Getting Started
 Edit your .csproj and set your *.json files to CopyToOutputDirectory. 
@@ -57,7 +57,7 @@ public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyCom
     }
 }
 ```
-Sample custom class that will used to house multiple configurations:
+Sample custom class that will be used to house multiple configurations:
 * Properties here should **match the entries in your [appsettings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/appsettings.json)** file.
 
 ```
