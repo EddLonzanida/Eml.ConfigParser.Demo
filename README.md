@@ -1,8 +1,8 @@
 # [Eml.ConfigParser](https://www.nuget.org/packages/Eml.ConfigParser/)
 Use strongly-typed values from: 
-* appsettings.json or any other config.json files. Supports List of Native Types and accepts CustomParsers for complex types.
+* [appsettings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/appsettings.json) or any other config.json files. Supports List of Native Types and accepts CustomParsers for complex types.
 * .Net5 is now supported.
-
+* Breaking changes: *Support to lower versions of .Net framework has been removed.* You need to upgrade to .Net5 or higher.
 
 ## Getting Started
 Edit your .csproj and set your *.json files to CopyToOutputDirectory. 
@@ -44,7 +44,7 @@ public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultCon
 }
  ```
 #### 3. Complex object
- * Sometimes you want to place your configurations in one place and elliminate the need for multiple ConfigParser classes. Sample below will allow you to do just that. Take note of the ***new ComplexTypeConfigParser***\<MyComplexClass\>() below:
+ * Sometimes you want to place configurations in one place, to elliminate the need for multiple ConfigParser classes. The example below will allow you to do just that. Take note of the ***new ComplexTypeConfigParser***\<MyComplexClass\>().
 ```javascript
 public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyComplexClassConfigParser>
 {
@@ -56,7 +56,11 @@ public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyCom
     {
     }
 }
+```
+Sample custom class that will used to house multiple configurations:
+* Properties here should **match the entries in your [appsettings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/appsettings.json)** file.
 
+```
 public class MyComplexClass
 {
     public string StringSetting { get; set; }
@@ -81,7 +85,7 @@ public class WhiteListConfigParser : ConfigParserBase<List<string>, WhiteListCon
 ```
 
 #### 5. string
-* Sample config parser for **string**.
+* Sample config parser for **string** *(or any other native types such as int, bool, etc..)*.
 ```javascript
 public class AppTitleParser : ConfigParserBase<string, AppTitleParser>
 {
@@ -99,7 +103,8 @@ More sample configs **[here](https://github.com/EddLonzanida/Eml.ConfigParser.De
 ##
    
 ## Usage
-### 1. json entry 
+### 1. [appsettings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/appsettings.json) 
+Sample:
 ```javascript  
 {
     "ConnectionStrings": {
@@ -133,7 +138,7 @@ More sample configs **[here](https://github.com/EddLonzanida/Eml.ConfigParser.De
     }
 }
 ```
-### 2.1 Instantiate ServiceUrlConfigParser - *Manually*
+### 2.a *Option 1* - Instantiate ServiceUrlConfigParser - *Manually*
 * Startup.cs
 ```javascript
 public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
@@ -143,10 +148,10 @@ public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
 }
 ```
 
-### 2.2 Or add to DI container and register - via *IServiceCollection*
-Requires [Scrutor](https://github.com/khellang/Scrutor) for the automated registration.
+### 2.b *Option 2* - DI registration via *IServiceCollection*
+* Requires [Scrutor](https://github.com/khellang/Scrutor) for the automated registration.
 
-See **[IntegrationTestDiFixture.cs](Tests/Eml.ConfigParser.Tests.Integration.NetCore/BaseClasses/IntegrationTestDiFixture.cs)** for more details.
+* See **[IntegrationTestDiFixture.cs](Tests/Eml.ConfigParser.Tests.Integration.NetCore/BaseClasses/IntegrationTestDiFixture.cs)** for more details.
 
 ```javascript
     private static void ConfigureServices(IServiceCollection services)
@@ -163,7 +168,7 @@ See **[IntegrationTestDiFixture.cs](Tests/Eml.ConfigParser.Tests.Integration.Net
     }
 ```
 ##
-Inject using DI signature: **IConfigParserBase<Uri, ServiceUrlConfigParser> serviceUrlConfigParser**
+* Inject using DI signature: **IConfigParserBase<Uri, ServiceUrlConfigParser> serviceUrlConfigParser**
 ```javascript
 public class ConsumerClass 
 {
