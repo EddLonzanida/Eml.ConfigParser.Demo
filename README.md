@@ -1,6 +1,7 @@
 # [Eml.ConfigParser](https://www.nuget.org/packages/Eml.ConfigParser/)
 
 * IoC/DI compatible.
+* Small size.
 * Has own [Visual Studio Addin](https://marketplace.visualstudio.com/items?itemName=eDuDeTification.ConfigParser) for easy use.
 * Read strongly-typed values from your [appsettings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/appsettings.json) or any other config.json files.
 * Supports List of Native Types and accepts Custom Classes for complex settings.
