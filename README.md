@@ -187,14 +187,13 @@ public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
     }
 ```
 
-##
-* Inject using DI signature: **IConfigParserBase<Uri, ServiceUrlConfigParser> serviceUrlConfigParser**
+### 4. Inject using DI signature: **IConfigParserBase<MyCustomSettingsConfig, MyCustomSettingsConfigParser> myCustomSettings**
 ```javascript
 public class ConsumerClass 
 {
-    public ConsumerClass(IConfigParserBase<Uri, ServiceUrlConfigParser> serviceUrlConfigParser) 
+    public ConsumerClass(IConfigParserBase<MyCustomSettingsConfig, MyCustomSettingsConfigParser> myCustomSettings) 
     { 
-        var serviceUrlConfigParserValue = serviceUrlConfigParser.Value; //retrieve value
+        var myCustomSettingsValue = myCustomSettings.Value; //retrieve value
     }
 }
 ```
