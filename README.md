@@ -1,8 +1,9 @@
 # [Eml.ConfigParser](https://www.nuget.org/packages/Eml.ConfigParser/)
-Use strongly-typed values from: 
-* [appsettings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/appsettings.json) or any other config.json files. Supports List of Native Types and accepts CustomParsers for complex types.
+
+* Read strongly-typed values from your [appsettings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/appsettings.json) or any other config.json files.
+* Supports List of Native Types and accepts Custom Classes for complex settings.
 * .Net5 is now supported.
-* **Breaking changes:** Starting with [Eml.ConfigParser.5.0.0](https://www.nuget.org/packages/Eml.ConfigParser/5.0.0), support to lower versions of .Net framework *has been removed.* You need to upgrade to .Net5 or higher.
+   * **Breaking changes:** Starting with [Eml.ConfigParser.5.0.0](https://www.nuget.org/packages/Eml.ConfigParser/5.0.0), support to lower versions of .Net framework *has been removed.* You need to upgrade to .Net5 or higher.
 
 ## Getting Started
 Edit your .csproj and set your *.json files to CopyToOutputDirectory. 
@@ -167,6 +168,25 @@ public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         );
     }
 ```
+
+### 3. Loading other config files: [custom-settings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/custom-settings.json)
+
+* See **[IntegrationTestDiFixture.cs](Tests/Eml.ConfigParser.Tests.Integration.NetCore/BaseClasses/IntegrationTestDiFixture.cs)** for more details.
+
+```
+    private static IConfiguration GetCustomConfiguration()
+    {
+        const string CUSTOM_CONFIG_FILE = "custom-settings.json";   // <- This can be passed as a parameter.
+
+        var configuration = ConfigBuilder.GetConfiguration()
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile(CUSTOM_CONFIG_FILE)                        // <- Will search for files in the current directory. See Getting Started on how to CopyToOutputDirectory.
+            .Build();
+
+        return configuration;
+    }
+```
+
 ##
 * Inject using DI signature: **IConfigParserBase<Uri, ServiceUrlConfigParser> serviceUrlConfigParser**
 ```javascript

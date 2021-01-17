@@ -19,9 +19,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore.BaseClasses
 
         public IntegrationTestDiFixture()
         {
-            Configuration = ConfigBuilder.GetConfiguration()
-                .AddJsonFile("appsettings.json")
-                .Build();
+            Configuration = GetCustomConfiguration();
 
             var services = new ServiceCollection();
 
@@ -41,6 +39,18 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore.BaseClasses
                     .AsSelfWithInterfaces()
                     .WithScopedLifetime()
             );
+        }
+
+        private static IConfiguration GetCustomConfiguration()
+        {
+            const string CUSTOM_CONFIG_FILE = "custom-settings.json";   // <- This can be passed as a parameter.
+
+            var configuration = ConfigBuilder.GetConfiguration()
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile(CUSTOM_CONFIG_FILE)                        // <- Will search for files in the current directory. See Getting Started on how to CopyToOutputDirectory.
+                .Build();
+
+            return configuration;
         }
 
         public void Dispose()

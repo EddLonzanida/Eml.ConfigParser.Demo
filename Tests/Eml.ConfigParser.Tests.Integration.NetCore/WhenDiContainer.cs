@@ -26,7 +26,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         }
 
         [Fact]
-        public void Mef_ShouldReturnValue()
+        public void ServiceProvider_ShouldReturnValue2()
         {
             var result = new Uri("http://testSite.com/home");
 
@@ -37,7 +37,7 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
         }
 
         [Fact]
-        public void Mef_ShouldReturnValueWhenGenerics()
+        public void ServiceProvider_ShouldReturnValueWhenGenerics()
         {
             var result = new Uri("http://testSite.com/home");
 
@@ -52,6 +52,15 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
             var sut = ServiceProvider.GetRequiredService<IConfigParserBase<MyComplexClass, MyComplexClassConfigParser>>();
 
             sut.Value.StringSetting.ShouldBe("My Value");
+        }
+
+
+        [Fact]
+        public void MyCustomSettings_ShouldBeDiscoverable()
+        {
+            var sut = ServiceProvider.GetRequiredService<IConfigParserBase<MyCustomSettingsConfig, MyCustomSettingsConfigParser>>();
+
+            sut.Value.StringSetting.ShouldBe("MyCustomSettings Value");
         }
     }
 }

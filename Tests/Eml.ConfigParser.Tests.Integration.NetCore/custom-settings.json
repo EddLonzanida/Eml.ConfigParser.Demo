@@ -1,0 +1,21 @@
+﻿{
+  "MyCustomSettings": {
+    "StringSetting": "MyCustomSettings Value",
+    "IntSetting": 23,
+    "AnEnum": "Lots",
+    "ListOfValues": [ "Value1", "Value2" ],
+    "Dictionary": {
+      "FirstKey": {
+        "Name": "First Class",
+        "IsEnabled": false
+      },
+      "SecondKey": {
+        "Name": "Second Class"
+      },
+      "ThirdKey": {
+        "Name": "Third Class",
+        "IsEnabled": true
+      }
+    }
+  }
+}
