@@ -187,7 +187,7 @@ public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
     }
 ```
 
-### 4. Inject using DI signature: **IConfigParserBase<MyCustomSettingsConfig, MyCustomSettingsConfigParser> myCustomSettings**
+### 4. Inject using DI signature: ***IConfigParserBase<MyCustomSettingsConfig, MyCustomSettingsConfigParser> myCustomSettings***
 ```javascript
 public class ConsumerClass 
 {
