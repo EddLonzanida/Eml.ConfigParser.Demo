@@ -1,4 +1,4 @@
-﻿using Eml.ConfigParser.Helpers;
+﻿using Eml.ConfigParser.Tests.Integration.NetCore.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,36 +19,22 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore.BaseClasses
 
         public IntegrationTestDiFixture()
         {
-            Configuration = GetCustomConfiguration();
+            const string CURRENT_ENVIRONMENT = "Development";   //<- this can be obtained from hostContext.HostingEnvironment.EnvironmentName
+
+            Configuration = GetCustomConfiguration(CURRENT_ENVIRONMENT);
 
             var services = new ServiceCollection();
 
-            ConfigureServices(services);
+            services.RegisterServices(Configuration); //<- Register IConfigParserBase
 
             ServiceProvider = services.BuildServiceProvider();
         }
 
-        private static void ConfigureServices(IServiceCollection services)
+        private static IConfiguration GetCustomConfiguration(string currentEnvironment)
         {
-            services.AddSingleton(Configuration); // Register IConfiguration instance
-            services.Scan(scan => scan
-                .FromAssemblyOf<IntegrationTestBase>()
+            const string CUSTOM_CONFIG_FILE = "custom-settings.json";
 
-                    // Register ConfigParsers
-                    .AddClasses(classes => classes.AssignableTo<IConfigParserBase>())
-                    .AsSelfWithInterfaces()
-                    .WithScopedLifetime()
-            );
-        }
-
-        private static IConfiguration GetCustomConfiguration()
-        {
-            const string CUSTOM_CONFIG_FILE = "custom-settings.json";   // <- This can be passed as a parameter.
-
-            var configuration = ConfigBuilder.GetConfiguration()
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile(CUSTOM_CONFIG_FILE)                        // <- Will search for files in the current directory. See Getting Started on how to CopyToOutputDirectory.
-                .Build();
+            var configuration = currentEnvironment.GetConfiguration(CUSTOM_CONFIG_FILE);    // <- Will search for files in the current directory. 
 
             return configuration;
         }

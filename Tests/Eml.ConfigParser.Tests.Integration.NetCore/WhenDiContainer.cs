@@ -5,6 +5,7 @@ using Eml.ConfigParser.Tests.Integration.NetCore.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System;
+using Eml.Contracts;
 using Xunit;
 
 namespace Eml.ConfigParser.Tests.Integration.NetCore
@@ -61,6 +62,14 @@ namespace Eml.ConfigParser.Tests.Integration.NetCore
             var sut = ServiceProvider.GetRequiredService<IConfigParserBase<MyCustomSettingsConfig, MyCustomSettingsConfigParser>>();
 
             sut.Value.StringSetting.ShouldBe("MyCustomSettings Value");
+        }
+
+        [Fact]
+        public void ConsumerClass_ShouldBeDiscoverable()
+        {
+            var sut = ServiceProvider.GetRequiredService<IConsumerClass>();
+
+            sut.MyCustomSettings.StringSetting.ShouldBe("MyCustomSettings Value");
         }
     }
 }

@@ -1,13 +1,14 @@
 # [Eml.ConfigParser](https://www.nuget.org/packages/Eml.ConfigParser/)
 
 * IoC/DI compatible.
+* Has own [Visual Studio Addin](https://marketplace.visualstudio.com/items?itemName=eDuDeTification.ConfigParser) for easier use.
 * Small size.
-* Has own [Visual Studio Addin](https://marketplace.visualstudio.com/items?itemName=eDuDeTification.ConfigParser) for easy use.
 * Read strongly-typed values from your [appsettings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/appsettings.json) or any other config.json files.
 * Supports List of Native Types and accepts Custom Classes for complex settings.
 * .Net5 is now supported.
-   * **Breaking changes:** Starting with [Eml.ConfigParser.5.0.0](https://www.nuget.org/packages/Eml.ConfigParser/5.0.0), support to lower versions of .Net framework *has been removed.* You need to upgrade to .Net5 or higher.
 
+    **Breaking changes:** Starting with [Eml.ConfigParser.5.0.0](https://www.nuget.org/packages/Eml.ConfigParser/5.0.0), support to lower versions of .Net framework *has been removed.* You need to upgrade to .Net5 or higher.
+##
 ## Getting Started
 Edit your .csproj and set your *.json files to CopyToOutputDirectory. 
 ```xml
@@ -33,8 +34,10 @@ public class ServiceUrlConfigParser : ConfigParserBase<Uri, ServiceUrlConfigPars
     }
 }
  ```
+
 #### 2. Connectionstrings
 For connectionstrings, postfix a class with **ConnectionStringParser** otherwise, ***MissingSettingException*** will occur. 
+
 ```javascript
 public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultConnectionStringParser>
 {
@@ -47,8 +50,10 @@ public class DefaultConnectionStringParser : ConfigParserBase<string, DefaultCon
     }
 }
  ```
+
 #### 3. Complex object
  * Sometimes you want to place configurations in one place, to elliminate the need for multiple ConfigParser classes. The example below will allow you to do just that. Take note of the ***new ComplexTypeConfigParser***\<MyComplexClass\>().
+
 ```javascript
 public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyComplexClassConfigParser>
 {
@@ -61,6 +66,7 @@ public class MyComplexClassConfigParser : ConfigParserBase<MyComplexClass, MyCom
     }
 }
 ```
+
 Sample custom class that will be used to house multiple configurations:
 * Properties here should **match the entries in your [appsettings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/appsettings.json)** file.
 
@@ -74,6 +80,7 @@ public class MyComplexClass
     public MyEnum AnEnum { get; set; }
 }
 ```
+
 #### 4. Lists
 * Sample config parser for **List<>**.
 ```javascript
@@ -101,11 +108,10 @@ public class AppTitleParser : ConfigParserBase<string, AppTitleParser>
     }
 }
 ```
-
 ##
 More sample configs **[here](https://github.com/EddLonzanida/Eml.ConfigParser.Demo/tree/master/Tests/Eml.ConfigParser.Tests.Integration.NetCore/Configurations)**.
 ##
-   
+
 ## Usage
 ### 1. [appsettings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/appsettings.json) 
 Sample:
@@ -158,48 +164,74 @@ public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
 * See **[IntegrationTestDiFixture.cs](Tests/Eml.ConfigParser.Tests.Integration.NetCore/BaseClasses/IntegrationTestDiFixture.cs)** for more details.
 
 ```javascript
-    private static void ConfigureServices(IServiceCollection services)
-    {
-        services.AddSingleton(Configuration); // Register IConfiguration instance. Note: This is for manual registration of IConfiguration, Asp.Net will automtically do this for you. 
-        services.Scan(scan => scan
-            .FromAssemblyOf<IntegrationTestBase>()
+        public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton(configuration); // Register IConfiguration instance. Note: This is for manual registration of IConfiguration, Asp.Net will automatically do this for you. 
+            services.Scan(scan => scan
+                .FromApplicationDependencies()
 
-                // Register ConfigParsers
-                .AddClasses(classes => classes.AssignableTo<IConfigParserBase>())
-                .AsSelfWithInterfaces()
-                .WithScopedLifetime()
-        );
-    }
+                    // Register ConfigParsers
+                    .AddClasses(classes => classes.AssignableTo<IConfigParserBase>())
+                    .AsSelfWithInterfaces()
+                    .WithScopedLifetime()
+
+                    // IDiDiscoverableTransient
+                    .AddClasses(classes => classes.AssignableTo(typeof(IDiDiscoverableTransient)))
+                    .AsImplementedInterfaces()
+                    .WithTransientLifetime()
+            );
+        }
 ```
 
 ### 3. Loading other config files: [custom-settings.json](Tests/Eml.ConfigParser.Tests.Integration.NetCore/custom-settings.json)
 
 * See **[IntegrationTestDiFixture.cs](Tests/Eml.ConfigParser.Tests.Integration.NetCore/BaseClasses/IntegrationTestDiFixture.cs)** for more details.
 
-```
-    private static IConfiguration GetCustomConfiguration()
-    {
-        const string CUSTOM_CONFIG_FILE = "custom-settings.json";   // <- This can be passed as a parameter.
+Sample class constructor:
 
-        var configuration = ConfigBuilder.GetConfiguration()
-            .AddJsonFile("appsettings.json")
-            .AddJsonFile(CUSTOM_CONFIG_FILE)                        // <- Will search for files in the current directory. See Getting Started on how to CopyToOutputDirectory.
-            .Build();
-
-        return configuration;
-    }
-```
-
-### 4. Inject using DI signature: ***IConfigParserBase<MyCustomSettingsConfig, MyCustomSettingsConfigParser> myCustomSettings***
 ```javascript
-public class ConsumerClass 
-{
-    public ConsumerClass(IConfigParserBase<MyCustomSettingsConfig, MyCustomSettingsConfigParser> myCustomSettings) 
-    { 
-        var myCustomSettingsValue = myCustomSettings.Value; //retrieve value
-    }
-}
+        public IntegrationTestDiFixture()
+        {
+            const string CURRENT_ENVIRONMENT = "Development";   //<- this can be obtained from hostContext.HostingEnvironment.EnvironmentName
+
+            Configuration = GetCustomConfiguration(CURRENT_ENVIRONMENT);
+
+            var services = new ServiceCollection();
+
+            services.RegisterServices(Configuration); //<- Register IConfigParserBase
+
+            ServiceProvider = services.BuildServiceProvider();
+        }
 ```
+
+GetCustomConfiguration:
+
+```javascript
+        private static IConfiguration GetCustomConfiguration(string currentEnvironment)
+        {
+            const string CUSTOM_CONFIG_FILE = "custom-settings.json";
+
+            var configuration = currentEnvironment.GetConfiguration(CUSTOM_CONFIG_FILE);    // <- Will search for files in the current directory. 
+
+            return configuration;
+        }
+
+```
+
+##
+* Inject using DI signature: **IConfigParserBase<MyCustomSettingsConfig, MyCustomSettingsConfigParser> myCustomSettingsConfigParser**
+```javascript
+    public class ConsumerClass : IConsumerClass
+    {
+        public MyCustomSettingsConfig MyCustomSettings { get; }
+
+        public ConsumerClass(IConfigParserBase<MyCustomSettingsConfig, MyCustomSettingsConfigParser> myCustomSettingsConfigParser) //<- Dependency injection via the class constructor
+        {
+            MyCustomSettings = myCustomSettingsConfigParser.Value;  //<- retrieve value
+        }
+    }
+```
+
 ##
 ### That's it.
 
